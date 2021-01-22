@@ -1,0 +1,36 @@
+{
+  "name": "Bulletin",
+  "description": "News dashboard app",
+  "keywords": ["productivity", "news"],
+  "website": "https://github.com/kentph/bulletin",
+  "repository": "https://github.com/kentph/bulletin",
+  "success_url": "/",
+  "env": {
+    "REACT_APP_DB_CLIENT": {
+      "description": "Database client to hook up to knex/objectionjs. Must be postgresHeroku on Heroku.",
+      "value": "postgresHeroku"
+    },
+    "JWT_SECRET": {
+      "description": "Key for use when signing JWTs.",
+      "generator": "secret"
+    },
+    "GENERATE_SOURCEMAP": {
+      "description": "Used by create-react-app to decide whether or not to generate source maps (we'll default to false).",
+      "value": "false"
+    },
+    "ALLOW_SIGNUPS": {
+      "description": "Set to false to disable new signups. Set this to true whenever you want to create a new account. Logins from existing accounts will continue to work even if this is false.",
+      "value": "false"
+    },
+    "TZ": {
+      "description": "Update this to your local timezone, so that time-based features can work correctly.",
+      "value": "America/New_York"
+    },
+    "REACT_APP_LINK_READING_THRESHOLD_MINUTES": {
+      "description": "Optional. Set a custom maximum duration for a reading interval (the time after visiting a link to count as time reading that link). Default is already set to 20 minutes.",
+      "value": "20",
+      "required": false
+    }
+  },
+  "addons": ["heroku-postgresql:hobby-dev"]
+}

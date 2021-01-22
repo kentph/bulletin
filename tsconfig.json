@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "types": [
+      "node",
+      "@wdio/mocha-framework",
+      "expect-webdriverio",
+      "@wdio/sync"
+    ]
+  },
+  "exclude": ["client", "test", "wdio.conf.ts", "node_modules", "docs"]
+}

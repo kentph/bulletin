@@ -1,0 +1,61 @@
+.FeedGroupContainer {
+  display: grid;
+  /* TODO should we add a fallback? */
+  grid-auto-columns: calc(
+    100vw - env(safe-area-inset-left, 0) - env(safe-area-inset-right, 0)
+  );
+  grid-auto-flow: column;
+  gap: 1px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--menu-bar-collapsed-height);
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: env(safe-area-inset-left, 0);
+  padding-left: env(safe-area-inset-left, 0);
+  padding-right: env(safe-area-inset-right, 0);
+}
+
+.FeedGroupContainer::-webkit-scrollbar {
+  /* HACK hide horizontal scrollbar in feed group container */
+  height: 0;
+}
+
+.NoMenuBar {
+  bottom: 0;
+}
+
+.PreloadModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(var(--header-color));
+  border-radius: 10px;
+  padding: 20px 25px;
+  color: rgb(var(--inactive-text-color));
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .AppMarkAsReadMode {
+    padding-top: var(--mark-as-read-mode-banner-height);
+  }
+
+  .FeedGroupContainer {
+    position: unset;
+    top: unset;
+    left: unset;
+    right: unset;
+    bottom: unset;
+    display: block;
+    padding-bottom: var(--menu-bar-collapsed-height);
+  }
+
+  .FeedGroupContainer.Sticky {
+    /* Get sticky working again */
+    overflow: unset;
+  }
+}

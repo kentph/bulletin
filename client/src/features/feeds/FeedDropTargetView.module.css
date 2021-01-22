@@ -1,0 +1,4 @@
+.FeedDropTarget {
+  margin: -2px 0 0 -2px;
+  border: 2px dashed rgb(var(--outline-color));
+}

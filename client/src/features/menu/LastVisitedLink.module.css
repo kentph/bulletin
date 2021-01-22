@@ -1,0 +1,50 @@
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.LastVisitedLink {
+  position: fixed;
+  z-index: 2;
+  right: 0;
+  bottom: calc(var(--menu-bar-collapsed-height));
+  margin-bottom: 10px;
+  border-top-left-radius: 99px;
+  border-bottom-left-radius: 99px;
+  border: 1px solid rgb(var(--outline-color));
+  border-right: none;
+  background-color: rgb(var(--focus-color));
+  padding: 10px 17px;
+  font-size: 0.7rem;
+  display: none;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.LastVisitedLink.Show {
+  display: unset;
+  opacity: 1;
+}
+
+/*
+  This class is distinct from .Show, because we are setting this
+  very slightly after .Show is set so that the transition will
+  start with opacity: 1.
+*/
+.LastVisitedLink.FadeOut {
+  transition: opacity 1s 4s;
+  opacity: 0;
+}
+
+.LastVisitedLink:hover,
+.LastVisitedLink:focus {
+  opacity: 1;
+  background-color: rgb(var(--highlight-color));
+}

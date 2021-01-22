@@ -1,0 +1,18 @@
+.TimeSpentVisual {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.Title {
+  margin-bottom: 0.5rem;
+  color: rgb(var(--inactive-text-color));
+  font-weight: bold;
+}
+
+.Time {
+  font-size: 3rem;
+  font-weight: 300;
+}

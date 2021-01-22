@@ -1,0 +1,58 @@
+.Container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  align-items: center;
+  padding: 20px;
+}
+
+.Form {
+  flex: 1 0 auto;
+  max-width: 400px;
+  margin: 0 auto 10vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 0;
+}
+
+.Title {
+  flex: 1 1 auto;
+}
+
+.FormInput {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.TopBar {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  padding: 10px 10px 10px 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 10px;
+  margin: -10px -10px 20px;
+}
+
+.BottomBar {
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.RadioInput {
+  margin-right: 10px;
+}
+
+.ErrorMessage {
+  color: red;
+  margin-bottom: 10px;
+}

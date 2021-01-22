@@ -1,0 +1,29 @@
+.Title {
+  margin-bottom: 1em;
+}
+
+.ZeroState {
+  color: rgb(var(--inactive-text-color));
+  text-align: center;
+}
+
+.Header {
+  padding: 15px 10px 5px;
+  border-top: 1px solid rgb(var(--outline-color));
+  font-size: 0.5rem;
+  margin: 15px 0 10px;
+  text-align: center;
+  color: rgb(var(--inactive-text-color));
+  /* TODO make sticky */
+}
+
+.ButtonBar {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.NextButton {
+  margin-left: 5px;
+}

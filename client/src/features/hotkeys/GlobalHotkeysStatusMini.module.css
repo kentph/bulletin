@@ -1,0 +1,10 @@
+.GlobalHotkeysToast {
+  font-size: 0.5rem;
+  flex: 0 0 auto;
+}
+
+@media screen and (max-width: 600px) {
+  .GlobalHotkeysToast {
+    display: none;
+  }
+}
