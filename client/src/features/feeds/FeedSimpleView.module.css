@@ -1,0 +1,178 @@
+@keyframes pop {
+  0% {
+    background-color: rgb(var(--highlight-color));
+    color: rgb(var(--primary-text-color));
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+}
+
+.Feed {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 0.5rem;
+  background-color: transparent;
+  display: flex;
+  flex-flow: column nowrap;
+  transition: background-color 0.75s, box-shadow 0.5s;
+  padding: 5px 10px 0;
+  box-shadow: 0px 0px 0px 1px rgba(var(--shadow-color), 0);
+  opacity: 1;
+  animation: fadeIn 0.5s;
+  cursor: pointer;
+  border-radius: var(--border-radius-small);
+}
+
+.Feed:hover,
+.Feed:focus-within {
+  background-color: rgb(var(--highlight-color));
+  z-index: 2;
+  transition: box-shadow 0.3s, background-color 0.1s;
+  box-shadow: var(--box-shadow);
+}
+
+.Feed:focus-within {
+  outline-color: rgb(var(--secondary-color));
+}
+
+.FeedTitleRow {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  height: 1.3rem;
+}
+
+.FeedTitle {
+  flex: 0 0 auto;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+
+.ViewAll {
+  flex: 0 0 auto;
+  display: none;
+}
+
+.TitleRowSpacer {
+  flex: 1 1 0;
+}
+
+.CollapseReadButton {
+  flex: 0 0 auto;
+  margin-left: 5px;
+}
+
+.FetchingText {
+  color: rgb(var(--inactive-text-color));
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.FeedTitleRow:hover .FetchingText {
+  display: none;
+}
+
+.CancelFetchButton {
+  display: none;
+  margin-right: 5px;
+}
+
+.FeedTitleRow:hover .CancelFetchButton {
+  display: unset;
+}
+
+.LastUpdated {
+  flex: 0 1 auto;
+  margin: 0 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: rgb(var(--inactive-text-color));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.Feed:hover .LastUpdated,
+.Feed:hover .ViewAll,
+.Feed:focus-within .LastUpdated,
+.Feed:focus-within .ViewAll {
+  opacity: 1;
+  transition: none;
+}
+
+.Fetching {
+  flex: 1 0 auto;
+  text-align: right;
+}
+
+.FeedEntries {
+  position: relative;
+  flex: 1 1 auto;
+  height: 0;
+  border-bottom: 1px solid rgb(var(--outline-color));
+  transition: border-bottom-color 0.3s;
+}
+
+.Feed:hover .FeedEntries,
+.Feed:focus-within .FeedEntries {
+  border-bottom-color: transparent;
+}
+
+.FeedEntriesPlaceholderText {
+  color: rgb(var(--inactive-text-color));
+  padding: 10px;
+  text-align: center;
+}
+
+.FeedEntriesPlaceholderText.Pop {
+  animation: pop 2s 0.3s;
+}
+
+.OpenModalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 5px;
+  background-color: rgba(var(--highlight-color), 0.9);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.OpenModalOverlay:hover,
+.OpenModalOverlay:focus-within {
+  opacity: 1;
+  transition: none;
+}
+
+.OpenModalOverlayText {
+  flex: 1 0 auto;
+  background-color: transparent;
+  border: none;
+}
+
+.FeedEntriesHiddenMessage {
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .Feed {
+    display: none;
+  }
+}

@@ -1,0 +1,264 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.MenuBar {
+  --menu-bar-transition-duration: 1s;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  background-color: rgb(var(--highlight-color));
+  box-shadow: 0px 0px 10px 1px rgba(var(--shadow-color), 0.2);
+  height: 100vh;
+  /* 100% of element's height */
+  /* TODO is fallback transform property necessary? */
+  transform: translate3d(
+    0,
+    calc(
+      100% - var(--menu-bar-collapsed-height) - env(safe-area-inset-bottom, 0)
+    ),
+    0
+  );
+  will-change: transform;
+  overflow: hidden;
+  /* TODO is fallback padding property necessary? */
+  padding: 0 env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
+  height: 100vh;
+}
+
+.MenuBar:hover,
+.MenuBar.Dragging,
+.MenuBar.Open {
+  --menu-bar-transition-duration: 0.4s;
+}
+
+.MenuBar.Open {
+  transform: translate3d(0, 0, 0);
+}
+
+.MenuBar.Animate {
+  transition: transform var(--menu-bar-transition-duration) var(--ease-out);
+}
+
+.MenuBar.Dragging {
+  transition: unset;
+}
+
+.MenuBarContent {
+  /* 100% of parent's height */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  font-size: 0.7rem;
+  /* Prevent touches from scrolling main list */
+  touch-action: none;
+}
+
+.MenuBarTitle {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--menu-bar-collapsed-height);
+}
+
+.MenuBarTitle.Animate {
+  transition: height var(--menu-bar-transition-duration) var(--ease-out);
+}
+
+.KeepOpen {
+  cursor: unset;
+}
+
+.MenuBarTitleContentContainer {
+  display: flex;
+  flex: 1 1;
+  animation: fadeIn 1s;
+}
+
+.MenuBarTitleContent {
+  flex: 0 1 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+/* https://stackoverflow.com/questions/32378953/keep-the-middle-item-centered-when-side-items-have-different-widths */
+.MenuBarTitleContentContainer:first-child > .MenuBarTitleContent {
+  margin-right: auto;
+  margin-left: unset;
+}
+
+.MenuBarTitleContentContainer:last-child > .MenuBarTitleContent {
+  margin-left: auto;
+  margin-right: unset;
+}
+
+.MenuBarButtonContainer {
+  align-self: stretch;
+}
+
+.MenuBarButtons {
+  display: flex;
+  flex-flow: row nowrap;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-items: stretch;
+}
+
+.MenuBarButton {
+  margin: 0 0 0 5px;
+  align-self: center;
+}
+
+.ToggleMenuButton {
+  margin-right: 10px;
+}
+
+.MenuBarDot {
+  margin: 0 5px;
+}
+
+.MenuBarLogo {
+  flex: 0 0 auto;
+  object-fit: contain;
+  height: 1rem;
+  width: auto;
+  margin: 0 5px 0 10px;
+}
+
+/* cls-1 corresponds to the class of the logo svg text */
+.MenuBarLogo :global(.cls-1) {
+  fill: rgb(var(--primary-text-color));
+}
+
+.MenuBarMiddleContentContainer {
+  flex: 1 1 auto;
+  overflow-y: scroll;
+  background-color: rgb(var(--highlight-color));
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  animation: fadeIn 0.5s backwards;
+}
+
+.MenuBarMiddleContent {
+  max-width: 600px;
+  padding: 10px;
+  width: 50%;
+  box-sizing: border-box;
+  margin: 0 2rem;
+}
+
+.MenuBarMiddleContent.Fill {
+  flex: 1 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.MenuBarFooter {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  height: var(--menu-bar-collapsed-height);
+  padding: 0 5px;
+}
+
+.Statistics {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.MenuButtons {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: stretch;
+}
+
+.MenuButton {
+  --margin: 0.3rem;
+  flex: 1 0 0;
+  margin: var(--margin);
+  margin-right: 0;
+  padding: 0.5rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.MenuButton:last-child {
+  margin-right: var(--margin);
+}
+
+.MenuButtonIcon {
+  height: 1.2rem;
+  width: 1.2rem;
+  margin-bottom: 0.3rem;
+}
+
+.StarredButton {
+  margin-top: 1em;
+}
+
+.SubMenuContainer {
+  animation: fadeIn 0.5s backwards;
+}
+
+.GroupText {
+  font-size: 0.5rem;
+  flex: 0 0 auto;
+  margin-left: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .MenuBar {
+    box-shadow: 0px -5px 20px 10px rgba(var(--shadow-color), 0.3);
+  }
+
+  .MenuBarTitleContentContainer {
+    flex-basis: auto;
+  }
+
+  .MenuBarTitleContentContainer:not(:first-child) {
+    flex-grow: 0;
+  }
+
+  .MenuBarMiddleContentContainer {
+    align-items: center;
+    justify-content: stretch;
+    flex-direction: column;
+  }
+
+  .MenuBarMiddleContentContainer.NoScroll {
+    overflow: hidden;
+  }
+
+  .MenuBarMiddleContent {
+    width: 100%;
+    margin: 0;
+  }
+
+  .MenuBarDot {
+    display: none;
+  }
+
+  .ToggleMenuButton {
+    margin-left: 5px;
+  }
+}

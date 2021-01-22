@@ -1,0 +1,190 @@
+@keyframes pop {
+  0% {
+    background-color: rgb(var(--highlight-color));
+    color: rgb(var(--primary-text-color));
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.Feed {
+  top: 0;
+  left: 0;
+  right: -5px;
+  font-size: 0.5rem;
+  min-height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  border-right: unset;
+  margin-bottom: 10px;
+}
+
+.Feed:focus-within .TopBorder,
+.StyleAsActive.TopBorder {
+  opacity: 0;
+}
+
+.FeedTitleRow {
+  border: none;
+  color: rgb(var(--primary-text-color));
+  text-align: left;
+  transition: background-color 0.5s, box-shadow 0.3s;
+  background-color: rgb(var(--primary-color));
+  flex: 0 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  box-sizing: border-box;
+  /* Make sure all parents have overflow unset for this to work. */
+  position: sticky;
+  top: 0;
+  padding: 0 10px;
+  z-index: 2;
+  box-shadow: 0px 0px 0px 1px rgba(var(--shadow-color), 0);
+  margin: 0;
+  animation: fadeIn 1s backwards;
+}
+
+.NotSticky {
+  position: unset;
+}
+
+.Feed:focus-within .FeedTitleRow,
+.StyleAsActive.FeedTitleRow {
+  z-index: 3;
+  box-shadow: 0px 6px 20px 10px rgba(var(--shadow-color), 0.3);
+}
+
+.TopRow {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: var(--feed-title-row-mobile-height);
+}
+
+.FeedTitle {
+  flex: 0 1 auto;
+  font-size: 0.8rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.SpacerLine {
+  min-width: 10px;
+  height: 1px;
+  background-color: rgb(var(--outline-color));
+  margin: 15px;
+}
+
+.CollapseButton {
+  flex: 0 0 auto;
+  margin-left: 5px;
+}
+
+.FetchingText {
+  color: rgb(var(--inactive-text-color));
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.UnreadLabel {
+  margin-right: 0.3rem;
+}
+
+.MarkAsReadButton {
+  margin-left: 5px;
+}
+
+.LastUpdated,
+.Fetching {
+  flex: 0 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.LastUpdated {
+  color: rgb(var(--inactive-text-color));
+}
+
+.FeedEntriesPlaceholderText {
+  color: rgb(var(--inactive-text-color));
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.FeedEntriesPlaceholderText.Pop {
+  animation: pop 2s 0.3s;
+}
+
+.FeedTitleRow.MarkAsReadMode {
+  top: calc(10px + var(--mark-as-read-mode-banner-height));
+}
+
+.FeedTitleButtons.Show {
+  display: none;
+}
+
+.FloatingLastUpdated {
+  display: none;
+}
+
+.OptionsButton {
+  display: none;
+}
+
+.FeedEntries {
+  position: relative;
+}
+
+.FeedEntries.Old {
+  opacity: 0.6;
+}
+
+.FeedEntries.Scroll {
+  overflow: unset;
+}
+
+.EntryOverlay {
+  background-color: rgba(var(--primary-color), 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  padding: 10px;
+  display: none;
+}
+
+.EntryOverlay.Visible {
+  display: flex;
+  animation: fadeIn 0.3s backwards;
+}
+
+.BottomBar {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px 10px 0;
+}
+
+.Entry {
+  padding: 10px;
+}
+
+@media screen and (min-width: 600px) {
+  .Feed {
+    display: none;
+  }
+}

@@ -1,0 +1,155 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.FeedGroup {
+  scroll-snap-align: none start;
+  overflow: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  background-color: transparent;
+  position: relative;
+}
+
+.FeedGroup.List {
+  padding-right: unset;
+}
+
+.FeedGroupGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 4fr);
+  grid-auto-rows: calc((100vh - var(--menu-bar-collapsed-height)) / 6);
+  grid-auto-flow: row dense;
+  position: relative;
+}
+
+.FeedGroupOptions {
+  display: none;
+  flex-flow: row;
+  align-items: center;
+  padding: 5px 10px;
+  margin-top: 10px;
+  border-top: 1px solid rgb(var(--outline-color));
+}
+
+.FeedGroupTitle {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: 0.5rem;
+}
+
+.FeedGroup.List > .FeedGroupGrid {
+  display: block;
+  grid-template-columns: unset;
+  /* Don't force feed height. */
+  grid-auto-rows: min-content;
+  grid-auto-flow: unset;
+}
+
+.FeedContainer {
+  /* https://css-tricks.com/preventing-a-grid-blowout/ */
+  min-width: 0;
+  grid-row-end: span 2;
+  position: relative;
+}
+
+.FeedGroup.List > .FeedGroupGrid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.FeedGroup.List > .FeedGroupGrid > .FeedContainer {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.FeedContainer:focus-within {
+  overflow: visible;
+}
+
+.FeedContainer.Scroll:focus-within {
+  overflow: hidden;
+}
+
+.FirstFeed {
+  grid-column-end: span 4;
+  grid-row-end: span 6;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+  HACK Safari has the 2 value syntax for scroll-snap-align in reverse order
+  https://bugs.webkit.org/show_bug.cgi?id=191865
+  Using this browserhack: https://gist.github.com/jbutko/6718701#gistcomment-2630350
+  */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    body {
+      scroll-snap-type: both mandatory;
+    }
+
+    .FeedGroup {
+      scroll-snap-align: start none;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .FeedGroup {
+    scroll-snap-align: unset;
+    height: unset;
+    overflow: unset;
+    padding-bottom: 0;
+    padding-right: unset;
+  }
+
+  .FeedGroup.List {
+    height: unset;
+  }
+
+  .FeedGroupGrid {
+    display: block;
+  }
+
+  .FeedGroupOptions {
+    display: flex;
+  }
+
+  .FeedContainer {
+    overflow: unset;
+  }
+}
+
+@media screen and (max-height: 400px) {
+  .FeedGroupGrid {
+    grid-auto-rows: calc((100vh - var(--menu-bar-collapsed-height)) / 3);
+  }
+}
+
+.TargetPreview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  background-color: rgba(var(--highlight-color), 0.1);
+  pointer-events: none;
+  padding: 5px;
+  font-size: 0.5rem;
+}
+
+.TargetPreview.CantDrop {
+  border: 2px solid red;
+  color: red;
+}

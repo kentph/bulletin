@@ -1,0 +1,121 @@
+@keyframes pop {
+  0% {
+    background-color: rgb(var(--highlight-color));
+    color: rgb(var(--primary-text-color));
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+}
+
+.Feed {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 0.5rem;
+  display: flex;
+  flex-flow: column nowrap;
+  transition: background-color 0.3s;
+  padding: 5px 10px 0;
+  opacity: 1;
+  animation: fadeIn 0.5s;
+  border-radius: var(--border-radius-small);
+  border: 2px solid transparent;
+}
+
+.Feed.ManualPositioning {
+  background-color: rgba(var(--header-color), 0.6);
+}
+
+.Feed.Dragging {
+  opacity: 0.5;
+}
+
+.Feed:hover,
+.Feed:focus-within {
+  background-color: rgb(var(--highlight-color));
+  z-index: 2;
+  transition: box-shadow 0.3s;
+  box-shadow: var(--box-shadow);
+}
+
+.FeedTitleRow {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  height: 1.3rem;
+}
+
+.FeedTitle {
+  flex: 0 0 auto;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+
+.TitleRowSpacer {
+  flex: 1 1 0;
+}
+
+.EditingForm {
+  position: relative;
+  flex: 1 1 auto;
+  height: 0;
+  padding: 0 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(var(--outline-color));
+}
+
+.Feed:hover .EditingForm,
+.Feed:focus-within .EditingForm {
+  border-bottom-color: transparent;
+}
+
+.EditButton {
+  margin-right: 3px;
+}
+
+@media screen and (max-width: 600px) {
+  .Feed {
+    display: none;
+  }
+}
+
+.OrderButtons {
+  font-size: 0.6rem;
+  margin-bottom: 10px;
+}
+
+.Index {
+  padding: 0 10px;
+}
+
+.VisibleOnHover {
+  opacity: 0;
+}
+
+.Feed:hover .VisibleOnHover,
+.Feed:focus-within .VisibleOnHover {
+  opacity: 1;
+}
+
+.EmphasisOnHover {
+  opacity: 0.5;
+}
+
+.Feed:hover .EmphasisOnHover,
+.Feed:focus-within .EmphasisOnHover {
+  opacity: 1;
+}

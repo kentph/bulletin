@@ -1,0 +1,206 @@
+@keyframes dropIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -50px, 0);
+  }
+}
+
+.Button {
+  --font-size: 0.5rem;
+  font-size: var(--font-size);
+  line-height: var(--font-size);
+  pointer-events: auto;
+  background-color: rgb(var(--button-color));
+  border-radius: var(--border-radius-small);
+  border: 1px solid rgb(var(--outline-color));
+  padding: 8px 10px;
+  color: rgb(var(--primary-text-color));
+  flex: 0 0 auto;
+}
+
+.Button:disabled {
+  opacity: 0.3;
+}
+
+.Secondary {
+  background-color: rgb(var(--secondary-color));
+  color: rgb(var(--secondary-text-color));
+  border-color: rgb(var(--secondary-color));
+}
+
+.Clear {
+  background-color: transparent;
+}
+
+.Large {
+  --font-size: 0.6rem;
+  padding: 8px 10px;
+}
+
+.Larger {
+  --font-size: 0.7rem;
+}
+
+.ButtonDivider {
+  height: var(--font-size);
+  width: 1px;
+  background-color: rgb(var(--outline-color));
+  flex: 0 0 auto;
+  margin: 0 5px;
+}
+
+.Divider {
+  height: 1rem;
+  width: 3px;
+  border-radius: 99px;
+  background-color: rgb(var(--primary-color));
+  flex: 0 0 auto;
+  margin-left: 5px;
+}
+
+.ToggleButtonActiveLabel {
+  font-weight: bold;
+}
+
+.ToggleButtonInactiveLabel {
+  color: rgb(var(--inactive-text-color));
+}
+
+.Spacing {
+  margin: 1em 0;
+}
+
+.HighlightedRow {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.HighlightedRow.Column {
+  flex-flow: column;
+  align-items: stretch;
+}
+
+.HighlightedRow:nth-of-type(odd) {
+  background-color: rgba(var(--header-color), 0.4);
+}
+
+.HighlightedRow:nth-of-type(even) {
+  background-color: rgba(var(--header-color), 0.2);
+}
+
+.HighlightedRow:first-of-type {
+  border-top-left-radius: var(--border-radius-small);
+  border-top-right-radius: var(--border-radius-small);
+}
+
+.HighlightedRow:last-of-type {
+  border-bottom-left-radius: var(--border-radius-small);
+  border-bottom-right-radius: var(--border-radius-small);
+}
+
+.HighlightedRowLabel {
+  flex: 1 1 auto;
+}
+
+.HighlightedRowValue {
+  flex: 0 0 auto;
+}
+
+.MarkAsReadModeBanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--mark-as-read-mode-banner-height);
+  margin: 5px;
+  border-radius: 5px;
+  background-color: red;
+  color: white;
+  padding: 5px 5px 5px 10px;
+  z-index: 3;
+  display: flex;
+  font-size: 0.6rem;
+  flex-flow: row nowrap;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.MarkAsReadModeBanner.Unfixed {
+  position: static;
+  border-radius: 0;
+  margin: 0;
+  padding: 10px 20px;
+}
+
+.Spacer {
+  flex: 1 1 auto;
+}
+
+.DropInBannerContainer {
+  position: fixed;
+  top: calc(5px + var(--feed-title-row-mobile-height));
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.DropInBanner {
+  padding: 10px 15px;
+  margin: 10px auto;
+  display: flex;
+  font-size: 0.5rem;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background-color: rgb(var(--secondary-color));
+  color: rgb(var(--secondary-text-color));
+  box-shadow: var(--box-shadow);
+  border-radius: 99px;
+  opacity: 1;
+  animation: dropIn 0.5s var(--ease-out);
+  z-index: 4;
+}
+
+.FormInput {
+  border-radius: var(--border-radius-small);
+  background-color: rgb(var(--input-color));
+  border: 1px solid rgb(var(--outline-color));
+  font-size: 0.7rem;
+  padding: 5px;
+  color: rgb(var(--primary-text-color));
+}
+
+.FormInput[input="text"] {
+  appearance: none;
+}
+
+.IconButton {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.IconButton > .FluentIcon {
+  height: var(--font-size);
+  width: var(--font-size);
+}
+
+.FluentIcon > path {
+  fill: rgb(var(--primary-text-color));
+}
+
+.FluentIcon.Secondary > path {
+  fill: rgb(var(--secondary-text-color));
+}
+
+.FluentIcon:first-child {
+  margin-right: 0.5em;
+}
+
+.FluentIcon:last-child {
+  margin-right: 0;
+}

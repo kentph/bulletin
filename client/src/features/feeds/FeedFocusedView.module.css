@@ -1,0 +1,167 @@
+@keyframes pop {
+  0% {
+    background-color: rgb(var(--highlight-color));
+    color: rgb(var(--primary-text-color));
+  }
+}
+
+@keyframes shadeIn {
+  0% {
+    background-color: rgba(var(--header-color), 0);
+  }
+  100% {
+    background-color: rgba(var(--header-color), 0.8);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.FocusedFeedContainer {
+  --focused-feed-padding: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: var(--menu-bar-collapsed-height);
+  z-index: 3;
+  background-color: rgba(var(--header-color), 0.8);
+  animation: shadeIn 400ms;
+}
+
+.FocusedFeed {
+  position: absolute;
+  top: 30px;
+  bottom: env(safe-area-inset-bottom, 0);
+  left: env(safe-area-inset-left, 0);
+  right: env(safe-area-inset-left, 0);
+  max-width: 900px;
+  background-color: rgb(var(--highlight-color));
+  margin: 0 auto;
+  animation: fadeIn 100ms;
+  display: flex;
+  flex-flow: column nowrap;
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  border-top-left-radius: var(--border-radius-small);
+  border-top-right-radius: var(--border-radius-small);
+}
+
+.FeedTitleRow {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  position: relative;
+  box-sizing: border-box;
+  margin: calc(var(--focused-feed-padding) - 10px);
+  margin-bottom: 10px;
+}
+
+.FeedTitle {
+  flex: 0 0 auto;
+  margin-left: 5px;
+  white-space: nowrap;
+}
+
+.Spacer {
+  flex: 1 1 0;
+}
+
+.FetchingText,
+.LastUpdated {
+  font-size: 0.5rem;
+  color: rgb(var(--inactive-text-color));
+  margin-right: 5px;
+}
+
+.AnnounceCheckbox {
+  font-size: 0.5rem;
+  margin-right: 5px;
+}
+
+.CollapseReadButton,
+.ToggleEntrySizeButton,
+.LastUpdated,
+.FetchingText {
+  margin-left: 5px;
+}
+
+.ToggleEntrySizeButton {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.Divider {
+  height: 1rem;
+  width: 3px;
+  border-radius: 99px;
+  background-color: rgb(var(--highlight-color));
+  flex: 0 0 auto;
+  margin-left: 9px;
+}
+
+.CloseButton {
+  margin-left: 9px;
+}
+
+.FeedEntriesPlaceholderText {
+  color: rgb(var(--inactive-text-color));
+  padding: 10px;
+  text-align: center;
+}
+
+.FeedEntriesPlaceholderText.Pop {
+  animation: pop 2s 0.3s;
+}
+
+.FeedEntriesContainer {
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+.Entry {
+  padding-left: var(--focused-feed-padding);
+  padding-right: var(--focused-feed-padding);
+}
+
+.ButtonBar {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 calc(var(--focused-feed-padding) - 10px);
+  margin-bottom: calc(var(--focused-feed-padding) - 10px);
+  font-size: 0.5rem;
+}
+
+.DoneButton {
+  margin-left: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .FocusedFeedContainer {
+    display: none;
+  }
+}
+
+@media screen and (max-height: 400px) {
+  .FocusedFeed {
+    top: 0;
+    max-width: unset;
+  }
+
+  .FeedTitleRow {
+    font-size: 0.6rem;
+    padding: 5px;
+  }
+}

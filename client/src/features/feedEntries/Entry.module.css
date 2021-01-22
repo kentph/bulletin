@@ -1,0 +1,175 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.Entry {
+  line-height: 0.7rem;
+  height: 0.7rem;
+  width: auto;
+  /* Prevent each entry from overflowing feed parent's width. */
+  overflow: hidden;
+  padding: 5px;
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  white-space: nowrap;
+  min-width: 0;
+  transition: background-color 0.2s;
+  animation: fadeIn 0.3s backwards;
+}
+
+.Entry:hover {
+  background-color: rgb(var(--primary-color));
+  transition: none;
+}
+
+.Entry.NoHover:hover {
+  background-color: unset;
+}
+
+.Entry:focus {
+  outline: none;
+  background-color: rgb(var(--focus-color));
+  z-index: 1;
+  transition: none;
+}
+
+.Entry.Read {
+  color: rgb(var(--inactive-text-color));
+}
+
+.Entry.Large {
+  white-space: unset;
+  height: unset;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Entry.Large > .EntryAuthor.Visible {
+  display: none;
+}
+
+.Entry.Large > .EntryText > .Title {
+  font-size: 0.6rem;
+  line-height: 0.8rem;
+  min-height: calc(0.8rem * 2);
+  max-height: calc(0.8rem * 3);
+}
+
+.Entry.Large > .EntryText > .Title.NoImage {
+  min-height: unset;
+}
+
+.Entry.Large > .EntryText > .Sub {
+  display: block;
+}
+
+.Entry.Large > .Thumbnail {
+  height: calc(0.8rem * 3);
+  width: calc(0.8rem * 3);
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.Title {
+  font-size: 0.6rem;
+  overflow: hidden;
+}
+
+.EntryText {
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.EntryAuthor {
+  color: rgb(var(--inactive-text-color));
+  margin-left: 10px;
+  display: none;
+}
+
+.EntryAuthor.Visible,
+.EntryAuthor:hover {
+  display: unset;
+}
+
+.TitleSub {
+  color: rgb(var(--inactive-text-color));
+}
+
+.Sub {
+  display: none;
+  font-size: 0.5rem;
+  margin-top: 5px;
+  color: rgb(var(--inactive-text-color));
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.Sub > span:after {
+  content: " · ";
+}
+
+.Sub > span:last-of-type:after {
+  content: "";
+}
+
+.Thumbnail {
+  flex-shrink: 0;
+  height: calc(0.8rem * 0.7);
+  width: calc(0.8rem * 2);
+  object-fit: cover;
+  margin-left: 5px;
+  border-radius: 999px;
+}
+
+.Star {
+  color: rgb(var(--star-color));
+  font-size: 0.5rem;
+  margin: 5px 5px 0 0;
+  /* Seems to center star vertically. */
+  align-self: flex-end;
+}
+
+.Entry.Large > .Star {
+  font-size: 0.8rem;
+  margin-right: 10px;
+  align-self: flex-start;
+}
+
+.Star.NoMargin {
+  margin-top: 0;
+}
+
+.OptionsButton {
+  display: none;
+  position: absolute;
+  right: 3px;
+  height: 20px;
+  padding: 0 5px;
+}
+
+.Entry.Large .OptionsButton {
+  height: unset;
+  right: 10px;
+  padding: 5px;
+}
+
+.Entry:hover .OptionsButton,
+.Entry:focus-within .OptionsButton {
+  display: unset;
+}
+
+@media screen and (max-width: 600px) {
+  .Entry:hover {
+    background-color: unset;
+  }
+}
