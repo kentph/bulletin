@@ -83,8 +83,11 @@ export default function FeedMobileView({
     name
   );
 
-  const scrollToTopOfFeed = useCallback(() => {
+  const scrollToTopOfFeed = useCallback(async () => {
     if (!isMobile || !feedElementRef.current) return;
+
+    // Wait for render.
+    await Promise.resolve();
 
     const currentLeft = 0;
     const currentTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -117,8 +120,8 @@ export default function FeedMobileView({
   const shouldCollapse = shouldCollapseFromSettings || showingFeedTitlesOnly;
 
   const markAllAsRead = useCallback(() => {
-    scrollToTopOfFeed();
     markFeedAsRead();
+    scrollToTopOfFeed();
   }, [markFeedAsRead, scrollToTopOfFeed]);
 
   useEffect(
@@ -221,7 +224,6 @@ export default function FeedMobileView({
           })}
           onClick={async () => {
             restoreTempCollapsedFeeds();
-            await Promise.resolve();
             scrollToTopOfFeed();
           }}
         >
