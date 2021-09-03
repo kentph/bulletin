@@ -95,7 +95,7 @@ export default function FeedMobileView({
         window.pageYOffset || document.documentElement.scrollTop;
       const end =
         feedElementRef.current.getBoundingClientRect().top + currentTop;
-      let difference = end - currentTop;
+      let difference = end - currentTop + 1;
       let start: number;
 
       if (!animate) {
