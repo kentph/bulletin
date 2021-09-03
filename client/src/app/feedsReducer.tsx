@@ -52,6 +52,7 @@ interface State {
   lastUpdatedAtByFeedName: FeedNameMap<number>;
   wasLastUpdateFromCacheByFeedName: FeedNameMap<boolean>;
   readsLastFetchedAt: number | undefined;
+  shouldShowFeedTitlesOnly: boolean;
 }
 
 const initialState: State = {
@@ -85,6 +86,7 @@ const initialState: State = {
   lastUpdatedAtByFeedName: {},
   wasLastUpdateFromCacheByFeedName: {},
   readsLastFetchedAt: undefined,
+  shouldShowFeedTitlesOnly: false,
 };
 
 const doUpdatesChangeMap = (update: EntryMap, map: EntryMap) => {
@@ -495,83 +497,90 @@ const { actions: feedsActions, reducer: feedsReducer } = createSlice({
     setReadsLastFetchedAt(state, action: PayloadAction<number | undefined>) {
       state.readsLastFetchedAt = action.payload;
     },
+    showFeedTitlesOnly(state) {
+      state.shouldShowFeedTitlesOnly = true;
+    },
+    restoreFullFeedsView(state) {
+      state.shouldShowFeedTitlesOnly = false;
+    },
   },
 });
 
 const feedsThunks = {
-  speakNewEntriesInFeed: (
-    newEntries: FeedEntry[],
-    feedName: string
-  ): AppThunk => (dispatch, getState) => {
-    const {
-      app: { isMobile, isVisible: isPageActive },
-      settings: { muteFeedAnnouncements, voice: voiceURI },
-      feeds: { spokenMap },
-    } = getState();
+  speakNewEntriesInFeed:
+    (newEntries: FeedEntry[], feedName: string): AppThunk =>
+    (dispatch, getState) => {
+      const {
+        app: { isMobile, isVisible: isPageActive },
+        settings: { muteFeedAnnouncements, voice: voiceURI },
+        feeds: { spokenMap },
+      } = getState();
 
-    const unspokenEntries = newEntries.filter((entry) => !spokenMap[entry.id]);
+      const unspokenEntries = newEntries.filter(
+        (entry) => !spokenMap[entry.id]
+      );
 
-    if (!unspokenEntries.length) return;
+      if (!unspokenEntries.length) return;
 
-    const newUnspokenIds = unspokenEntries.map((entry) => entry.id);
-    // Mark as spoken immediately, before they're actually spoken.
-    // This prevents us from queuing up duplicate utterances.
-    dispatch(
-      feedsActions.addToSpokenMap(
-        newUnspokenIds.reduce<EntryMap>((result, id) => {
-          result[id] = true;
-          return result;
-        }, {})
-      )
-    );
-    // For now, don't actually speak on mobile, but continue to add to spoken map.
-    if (isMobile || isPageActive || muteFeedAnnouncements) {
+      const newUnspokenIds = unspokenEntries.map((entry) => entry.id);
+      // Mark as spoken immediately, before they're actually spoken.
+      // This prevents us from queuing up duplicate utterances.
+      dispatch(
+        feedsActions.addToSpokenMap(
+          newUnspokenIds.reduce<EntryMap>((result, id) => {
+            result[id] = true;
+            return result;
+          }, {})
+        )
+      );
+      // For now, don't actually speak on mobile, but continue to add to spoken map.
+      if (isMobile || isPageActive || muteFeedAnnouncements) {
+        dispatch(
+          networkActions.pushToBuffer({
+            key: BATCH_MARK_FEED_AS_SPOKEN_BUFFER,
+            entry: { feedName, ids: newUnspokenIds },
+          })
+        );
+        return;
+      }
+
+      const createUtteranceWithVoice = (text: string) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voice = window.speechSynthesis
+          .getVoices()
+          .find((voice) => voice.voiceURI === voiceURI);
+        if (voice) utterance.voice = voice;
+        utterance.rate = UTTERANCE_RATE;
+        return utterance;
+      };
+
+      window.speechSynthesis.speak(
+        createUtteranceWithVoice(`New in. ${feedName}`)
+      );
+
+      unspokenEntries.forEach((entry, index) => {
+        window.speechSynthesis.speak(createUtteranceWithVoice(`${index + 1}`));
+        if (entry.author)
+          window.speechSynthesis.speak(
+            createUtteranceWithVoice(`from ${entry.author}`)
+          );
+        const utterance = createUtteranceWithVoice(entry.text);
+
+        // TODO allow custom utterance languages (eg. en-UK for en).
+        if (entry.lang) {
+          utterance.lang = entry.lang;
+        }
+
+        window.speechSynthesis.speak(utterance);
+      });
+
       dispatch(
         networkActions.pushToBuffer({
           key: BATCH_MARK_FEED_AS_SPOKEN_BUFFER,
           entry: { feedName, ids: newUnspokenIds },
         })
       );
-      return;
-    }
-
-    const createUtteranceWithVoice = (text: string) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      const voice = window.speechSynthesis
-        .getVoices()
-        .find((voice) => voice.voiceURI === voiceURI);
-      if (voice) utterance.voice = voice;
-      utterance.rate = UTTERANCE_RATE;
-      return utterance;
-    };
-
-    window.speechSynthesis.speak(
-      createUtteranceWithVoice(`New in. ${feedName}`)
-    );
-
-    unspokenEntries.forEach((entry, index) => {
-      window.speechSynthesis.speak(createUtteranceWithVoice(`${index + 1}`));
-      if (entry.author)
-        window.speechSynthesis.speak(
-          createUtteranceWithVoice(`from ${entry.author}`)
-        );
-      const utterance = createUtteranceWithVoice(entry.text);
-
-      // TODO allow custom utterance languages (eg. en-UK for en).
-      if (entry.lang) {
-        utterance.lang = entry.lang;
-      }
-
-      window.speechSynthesis.speak(utterance);
-    });
-
-    dispatch(
-      networkActions.pushToBuffer({
-        key: BATCH_MARK_FEED_AS_SPOKEN_BUFFER,
-        entry: { feedName, ids: newUnspokenIds },
-      })
-    );
-  },
+    },
 };
 
 export type FeedsState = ReturnType<typeof feedsReducer>;
