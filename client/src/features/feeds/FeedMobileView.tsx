@@ -83,36 +83,48 @@ export default function FeedMobileView({
     name
   );
 
-  const scrollToTopOfFeed = useCallback(async () => {
-    if (!isMobile || !feedElementRef.current) return;
+  const scrollToTopOfFeed = useCallback(
+    async (animate: boolean = true) => {
+      if (!isMobile || !feedElementRef.current) return;
 
-    // Wait for render.
-    await Promise.resolve();
+      // Wait for render.
+      await Promise.resolve();
 
-    const currentLeft = 0;
-    const currentTop = window.pageYOffset || document.documentElement.scrollTop;
-    const end = feedElementRef.current.getBoundingClientRect().top + currentTop;
-    let difference = end - currentTop;
-    let start: number;
+      const currentLeft = 0;
+      const currentTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const end =
+        feedElementRef.current.getBoundingClientRect().top + currentTop;
+      let difference = end - currentTop;
+      let start: number;
 
-    // TODO currently using the same parameters as --ease-out, try to combine.
-    // https://github.com/kentph/bulletin/issues/215
+      if (!animate) {
+        window.scrollTo(currentLeft, currentTop);
+        return;
+      }
+      // TODO currently using the same parameters as --ease-out, try to combine.
+      // https://github.com/kentph/bulletin/issues/215
 
-    const easing = BezierEasing(0, 1.04, 0.31, 1);
-    const animateScroll: FrameRequestCallback = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = (timestamp - start) / SCROLL_DURATION;
+      const easing = BezierEasing(0, 1.04, 0.31, 1);
+      const animateScroll: FrameRequestCallback = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = (timestamp - start) / SCROLL_DURATION;
 
-      // Do animation.
-      window.scrollTo(currentLeft, currentTop + easing(progress) * difference);
+        // Do animation.
+        window.scrollTo(
+          currentLeft,
+          currentTop + easing(progress) * difference
+        );
 
-      // TODO also end animation if the user scrolls.
+        // TODO also end animation if the user scrolls.
 
-      if (progress < 1) window.requestAnimationFrame(animateScroll);
-    };
+        if (progress < 1) window.requestAnimationFrame(animateScroll);
+      };
 
-    window.requestAnimationFrame(animateScroll);
-  }, [isMobile]);
+      window.requestAnimationFrame(animateScroll);
+    },
+    [isMobile]
+  );
 
   const { shouldCollapse: shouldCollapseFromSettings, toggleShowFeed } =
     useCollapseFeed(name, scrollToTopOfFeed);
@@ -224,7 +236,7 @@ export default function FeedMobileView({
           })}
           onClick={async () => {
             restoreTempCollapsedFeeds();
-            scrollToTopOfFeed();
+            scrollToTopOfFeed(false);
           }}
         >
           <div className={styles.TopRow}>
