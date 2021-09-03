@@ -219,8 +219,9 @@ export default function FeedMobileView({
             [styles.StyleAsActive]: shouldStyleAsActive && !shouldCollapse,
             [styles.NotSticky]: settings.hideStickyHeaders,
           })}
-          onClick={() => {
+          onClick={async () => {
             restoreTempCollapsedFeeds();
+            await Promise.resolve();
             scrollToTopOfFeed();
           }}
         >
