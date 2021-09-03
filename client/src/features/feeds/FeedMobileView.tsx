@@ -206,7 +206,7 @@ export default function FeedMobileView({
           [styles.NotSticky]: settings.hideStickyHeaders,
         })}
         onClick={() => {
-          if (!shouldCollapse) scrollToTopOfFeed();
+          scrollToTopOfFeed();
         }}
       >
         <div className={styles.TopRow}>
