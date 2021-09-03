@@ -248,7 +248,7 @@ export default function FeedMobileView({
                     unread entries
                   </span>
                 ) : undefined}
-                {shouldCollapseFromSettings && (
+                {!showingFeedTitlesOnly && (
                   <button
                     className={classNames(
                       sharedStyles.Button,
