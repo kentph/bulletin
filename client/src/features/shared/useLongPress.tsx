@@ -29,6 +29,7 @@ export default function useLongPress(
       event.preventDefault();
       start.current = [event.touches[0].pageX, event.touches[0].pageY];
       timeoutId.current = window.setTimeout(() => {
+        event.stopPropagation();
         onLongPress();
         cancelLongPress();
       }, LONG_PRESS_TIMEOUT);
