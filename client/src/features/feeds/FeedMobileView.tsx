@@ -26,7 +26,6 @@ import { RootState } from "../../app/rootReducer";
 import { feedsActions } from "../../app/feedsReducer";
 import { appActions, MenuType } from "../../app/appReducer";
 import { axiosSourceByFeedNameWithGetter } from "../../app/axiosCancelSource";
-import useLongPress from "../shared/useLongPress";
 
 const SCROLL_DURATION = 500;
 
@@ -227,82 +226,80 @@ export default function FeedMobileView({
         ref: feedElementRef,
       }}
     >
-      {useLongPress(
-        <div
-          className={classNames(styles.FeedTitleRow, {
-            [styles.MarkAsReadMode]: isMarkAsReadModeOn,
-            [styles.StyleAsActive]: shouldStyleAsActive && !shouldCollapse,
-            [styles.NotSticky]: settings.hideStickyHeaders,
-          })}
-          onClick={async () => {
-            restoreTempCollapsedFeeds();
-            scrollToTopOfFeed(false);
-          }}
-        >
-          <div className={styles.TopRow}>
-            <h3
-              className={classNames(styles.FeedTitle, {
-                [styles.Show]: isUpdating,
-              })}
-            >
-              {name}
-            </h3>
+      <div
+        className={classNames(styles.FeedTitleRow, {
+          [styles.MarkAsReadMode]: isMarkAsReadModeOn,
+          [styles.StyleAsActive]: shouldStyleAsActive && !shouldCollapse,
+          [styles.NotSticky]: settings.hideStickyHeaders,
+        })}
+        onClick={async () => {
+          restoreTempCollapsedFeeds();
+          scrollToTopOfFeed(false);
+        }}
+        onDoubleClick={() => {
+          collapseAllFeeds();
+        }}
+      >
+        <div className={styles.TopRow}>
+          <h3
+            className={classNames(styles.FeedTitle, {
+              [styles.Show]: isUpdating,
+            })}
+          >
+            {name}
+          </h3>
 
-            <div
-              className={classNames(sharedStyles.Spacer, styles.SpacerLine)}
-            />
+          <div className={classNames(sharedStyles.Spacer, styles.SpacerLine)} />
 
-            {shouldCollapse ? (
-              <>
-                {sortedFeedEntries && sortedFeedEntries.length ? (
-                  <span className={styles.UnreadLabel}>
-                    {sortedFeedEntries.length > 10
-                      ? "10+"
-                      : sortedFeedEntries.length}{" "}
-                    unread entries
-                  </span>
-                ) : undefined}
-                {!showingFeedTitlesOnly && (
-                  <button
-                    className={classNames(
-                      sharedStyles.Button,
-                      sharedStyles.IconButton,
-                      styles.CollapseButton
-                    )}
-                    onClick={toggleShowFeed}
-                  >
-                    <ExpandIcon className={sharedStyles.FluentIcon} />
-                    <span>Expand</span>
-                  </button>
-                )}
-              </>
-            ) : undefined}
+          {shouldCollapse ? (
+            <>
+              {sortedFeedEntries && sortedFeedEntries.length ? (
+                <span className={styles.UnreadLabel}>
+                  {sortedFeedEntries.length > 10
+                    ? "10+"
+                    : sortedFeedEntries.length}{" "}
+                  unread entries
+                </span>
+              ) : undefined}
+              {!showingFeedTitlesOnly && (
+                <button
+                  className={classNames(
+                    sharedStyles.Button,
+                    sharedStyles.IconButton,
+                    styles.CollapseButton
+                  )}
+                  onClick={toggleShowFeed}
+                >
+                  <ExpandIcon className={sharedStyles.FluentIcon} />
+                  <span>Expand</span>
+                </button>
+              )}
+            </>
+          ) : undefined}
 
-            {!shouldCollapse && lastUpdatedAt ? (
-              isUpdating ? (
-                <div className={styles.Fetching}>
-                  <div className={styles.FetchingText}>Fetching...</div>
-                  <button
-                    className={classNames(
-                      sharedStyles.Button,
-                      styles.CancelFetchButton
-                    )}
-                    onClick={cancelFetch}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <div className={styles.LastUpdated}>
-                  {`From ${moment(lastUpdatedAt).fromNow()}
+          {!shouldCollapse && lastUpdatedAt ? (
+            isUpdating ? (
+              <div className={styles.Fetching}>
+                <div className={styles.FetchingText}>Fetching...</div>
+                <button
+                  className={classNames(
+                    sharedStyles.Button,
+                    styles.CancelFetchButton
+                  )}
+                  onClick={cancelFetch}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div className={styles.LastUpdated}>
+                {`From ${moment(lastUpdatedAt).fromNow()}
                 ${wasLastUpdateFromCache ? " (cache)" : ""}`}
-                </div>
-              )
-            ) : null}
-          </div>
-        </div>,
-        collapseAllFeeds
-      )}
+              </div>
+            )
+          ) : null}
+        </div>
+      </div>
 
       {shouldCollapse ? undefined : sortedFeedEntries ? (
         <div className={styles.FeedEntries}>
