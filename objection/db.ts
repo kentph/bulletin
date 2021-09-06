@@ -10,6 +10,9 @@ import { Settings, SettingsData } from "../client/src/types/settingsTypes";
 import { FeedEntry } from "../client/src/types/feedTypes";
 
 export const initObjectionDb = () => {
+  // LOG
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+
   const knex = Knex({
     ...knexfile[process.env.NODE_ENV as keyof typeof knexfile],
     // Allows us to only use camelCase outside of db.

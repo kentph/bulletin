@@ -26,7 +26,6 @@ import { RootState } from "../../app/rootReducer";
 import { feedsActions } from "../../app/feedsReducer";
 import { appActions, MenuType } from "../../app/appReducer";
 import { axiosSourceByFeedNameWithGetter } from "../../app/axiosCancelSource";
-import useLongPress from "../shared/useLongPress";
 
 const SCROLL_DURATION = 500;
 
@@ -83,33 +82,49 @@ export default function FeedMobileView({
     name
   );
 
-  const scrollToTopOfFeed = useCallback(() => {
-    if (!isMobile || !feedElementRef.current) return;
+  const scrollToTopOfFeed = useCallback(
+    async (shouldAnimate: boolean = true) => {
+      if (!isMobile || !feedElementRef.current) return;
 
-    const currentLeft = 0;
-    const currentTop = window.pageYOffset || document.documentElement.scrollTop;
-    const end = feedElementRef.current.getBoundingClientRect().top + currentTop;
-    let difference = end - currentTop;
-    let start: number;
+      // Wait for render.
+      await Promise.resolve();
 
-    // TODO currently using the same parameters as --ease-out, try to combine.
-    // https://github.com/kentph/bulletin/issues/215
+      const currentLeft = 0;
+      const currentTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      const end =
+        feedElementRef.current.getBoundingClientRect().top + currentTop;
+      let difference = end - currentTop - 5;
+      let start: number;
 
-    const easing = BezierEasing(0, 1.04, 0.31, 1);
-    const animateScroll: FrameRequestCallback = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = (timestamp - start) / SCROLL_DURATION;
+      if (!shouldAnimate) {
+        window.scrollTo(currentLeft, end);
+        return;
+      }
 
-      // Do animation.
-      window.scrollTo(currentLeft, currentTop + easing(progress) * difference);
+      // TODO currently using the same parameters as --ease-out, try to combine.
+      // https://github.com/kentph/bulletin/issues/215
 
-      // TODO also end animation if the user scrolls.
+      const easing = BezierEasing(0, 1.04, 0.31, 1);
+      const animateScroll: FrameRequestCallback = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = (timestamp - start) / SCROLL_DURATION;
 
-      if (progress < 1) window.requestAnimationFrame(animateScroll);
-    };
+        // Do animation.
+        window.scrollTo(
+          currentLeft,
+          currentTop + easing(progress) * difference
+        );
 
-    window.requestAnimationFrame(animateScroll);
-  }, [isMobile]);
+        // TODO also end animation if the user scrolls.
+
+        if (progress < 1) window.requestAnimationFrame(animateScroll);
+      };
+
+      window.requestAnimationFrame(animateScroll);
+    },
+    [isMobile]
+  );
 
   const { shouldCollapse: shouldCollapseFromSettings, toggleShowFeed } =
     useCollapseFeed(name, scrollToTopOfFeed);
@@ -117,8 +132,8 @@ export default function FeedMobileView({
   const shouldCollapse = shouldCollapseFromSettings || showingFeedTitlesOnly;
 
   const markAllAsRead = useCallback(() => {
-    scrollToTopOfFeed();
     markFeedAsRead();
+    scrollToTopOfFeed();
   }, [markFeedAsRead, scrollToTopOfFeed]);
 
   useEffect(
@@ -208,86 +223,88 @@ export default function FeedMobileView({
   return (
     <div
       {...{
-        className: styles.Feed,
+        className: classNames(styles.Feed, {
+          [styles.FadeIn]: showingFeedTitlesOnly,
+        }),
         ref: feedElementRef,
       }}
     >
-      {useLongPress(
-        <div
-          className={classNames(styles.FeedTitleRow, {
-            [styles.MarkAsReadMode]: isMarkAsReadModeOn,
-            [styles.StyleAsActive]: shouldStyleAsActive && !shouldCollapse,
-            [styles.NotSticky]: settings.hideStickyHeaders,
-          })}
-          onClick={() => {
+      <div
+        className={classNames(styles.FeedTitleRow, {
+          [styles.MarkAsReadMode]: isMarkAsReadModeOn,
+          [styles.StyleAsActive]: shouldStyleAsActive && !shouldCollapse,
+          [styles.NotSticky]: settings.hideStickyHeaders,
+        })}
+        onClick={async () => {
+          if (showingFeedTitlesOnly) {
             restoreTempCollapsedFeeds();
-            scrollToTopOfFeed();
-          }}
-        >
-          <div className={styles.TopRow}>
-            <h3
-              className={classNames(styles.FeedTitle, {
-                [styles.Show]: isUpdating,
-              })}
-            >
-              {name}
-            </h3>
+            scrollToTopOfFeed(false);
+          } else scrollToTopOfFeed();
+        }}
+        onDoubleClick={() => {
+          collapseAllFeeds();
+        }}
+      >
+        <div className={styles.TopRow}>
+          <h3
+            className={classNames(styles.FeedTitle, {
+              [styles.Show]: isUpdating,
+            })}
+          >
+            {name}
+          </h3>
 
-            <div
-              className={classNames(sharedStyles.Spacer, styles.SpacerLine)}
-            />
+          <div className={classNames(sharedStyles.Spacer, styles.SpacerLine)} />
 
-            {shouldCollapse ? (
-              <>
-                {sortedFeedEntries && sortedFeedEntries.length ? (
-                  <span className={styles.UnreadLabel}>
-                    {sortedFeedEntries.length > 10
-                      ? "10+"
-                      : sortedFeedEntries.length}{" "}
-                    unread entries
-                  </span>
-                ) : undefined}
-                {shouldCollapseFromSettings && (
-                  <button
-                    className={classNames(
-                      sharedStyles.Button,
-                      sharedStyles.IconButton,
-                      styles.CollapseButton
-                    )}
-                    onClick={toggleShowFeed}
-                  >
-                    <ExpandIcon className={sharedStyles.FluentIcon} />
-                    <span>Expand</span>
-                  </button>
-                )}
-              </>
-            ) : undefined}
+          {shouldCollapse ? (
+            <>
+              {sortedFeedEntries && sortedFeedEntries.length ? (
+                <span className={styles.UnreadLabel}>
+                  {sortedFeedEntries.length > 10
+                    ? "10+"
+                    : sortedFeedEntries.length}{" "}
+                  unread entries
+                </span>
+              ) : undefined}
+              {!showingFeedTitlesOnly && (
+                <button
+                  className={classNames(
+                    sharedStyles.Button,
+                    sharedStyles.IconButton,
+                    styles.CollapseButton
+                  )}
+                  onClick={toggleShowFeed}
+                >
+                  <ExpandIcon className={sharedStyles.FluentIcon} />
+                  <span>Expand</span>
+                </button>
+              )}
+            </>
+          ) : undefined}
 
-            {!shouldCollapse && lastUpdatedAt ? (
-              isUpdating ? (
-                <div className={styles.Fetching}>
-                  <div className={styles.FetchingText}>Fetching...</div>
-                  <button
-                    className={classNames(
-                      sharedStyles.Button,
-                      styles.CancelFetchButton
-                    )}
-                    onClick={cancelFetch}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              ) : (
-                <div className={styles.LastUpdated}>
-                  {`From ${moment(lastUpdatedAt).fromNow()}
+          {!shouldCollapse && lastUpdatedAt ? (
+            isUpdating ? (
+              <div className={styles.Fetching}>
+                <div className={styles.FetchingText}>Fetching...</div>
+                <button
+                  className={classNames(
+                    sharedStyles.Button,
+                    styles.CancelFetchButton
+                  )}
+                  onClick={cancelFetch}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div className={styles.LastUpdated}>
+                {`From ${moment(lastUpdatedAt).fromNow()}
                 ${wasLastUpdateFromCache ? " (cache)" : ""}`}
-                </div>
-              )
-            ) : null}
-          </div>
-        </div>,
-        collapseAllFeeds
-      )}
+              </div>
+            )
+          ) : null}
+        </div>
+      </div>
 
       {shouldCollapse ? undefined : sortedFeedEntries ? (
         <div className={styles.FeedEntries}>
