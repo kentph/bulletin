@@ -243,6 +243,7 @@ export default function FeedMobileView({
         }}
         onDoubleClick={() => {
           collapseAllFeeds();
+          scrollToTopOfFeed(false);
         }}
       >
         <div className={styles.TopRow}>
