@@ -83,7 +83,7 @@ export default function FeedMobileView({
   );
 
   const scrollToTopOfFeed = useCallback(
-    async () => {
+    async (shouldAnimate: boolean = true) => {
       if (!isMobile || !feedElementRef.current) return;
 
       // Wait for render.
@@ -96,6 +96,11 @@ export default function FeedMobileView({
         feedElementRef.current.getBoundingClientRect().top + currentTop;
       let difference = end - currentTop - 5;
       let start: number;
+
+      if (!shouldAnimate) {
+        window.scrollTo(currentLeft, end);
+        return;
+      }
 
       // TODO currently using the same parameters as --ease-out, try to combine.
       // https://github.com/kentph/bulletin/issues/215
@@ -218,7 +223,9 @@ export default function FeedMobileView({
   return (
     <div
       {...{
-        className: styles.Feed,
+        className: classNames(styles.Feed, {
+          [styles.FadeIn]: showingFeedTitlesOnly,
+        }),
         ref: feedElementRef,
       }}
     >
@@ -229,8 +236,10 @@ export default function FeedMobileView({
           [styles.NotSticky]: settings.hideStickyHeaders,
         })}
         onClick={async () => {
-          restoreTempCollapsedFeeds();
-          scrollToTopOfFeed();
+          if (showingFeedTitlesOnly) {
+            restoreTempCollapsedFeeds();
+            scrollToTopOfFeed(false);
+          } else scrollToTopOfFeed();
         }}
         onDoubleClick={() => {
           collapseAllFeeds();

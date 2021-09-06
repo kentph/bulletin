@@ -21,7 +21,7 @@
   white-space: nowrap;
   min-width: 0;
   transition: background-color 0.2s;
-  animation: fadeIn 0.3s backwards;
+  animation: fadeIn 1s;
 }
 
 .Entry:hover {
