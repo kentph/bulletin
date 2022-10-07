@@ -44,15 +44,15 @@ If you'd like to choose your own cloud provider, use Dokku instead.
 As a quick example, here's how to deploy to Digital Ocean (based on the instructions here <http://dokku.viewdocs.io/dokku/deployment/application-deployment>):
 
 1. Start up a droplet using the Dokku 1-click installer (<https://marketplace.digitalocean.com/apps/dokku>).
-2. Make sure to finish configuring your new droplet (visit the server URL and follow the instructions there).
-3. SSH into the droplet, and run the following commands:
+2. Make sure to finish configuring your new droplet (visit the server IP in your browser and follow the instructions there, finally clicking Finish Setup).
+3. SSH into the droplet (eg. `ssh -i [public key location] root@[droplet IP]`), and run the following commands:
 
    ```bash
    dokku apps:create bulletin
    sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git
    dokku postgres:create bulletindb
    dokku postgres:link bulletindb bulletin
-   dokku config:set REACT_APP_DB_CLIENT=postgresHeroku JWT_SECRET="[add your secret here]" GENERATE_SOURCEMAP=false ALLOW_SIGNUPS=true TZ=America/New_York
+   dokku config:set bulletin REACT_APP_DB_CLIENT=postgresHeroku JWT_SECRET="[add your secret here]" GENERATE_SOURCEMAP=false ALLOW_SIGNUPS=true TZ=America/New_York
    ```
 
    What we're doing:
@@ -64,10 +64,10 @@ As a quick example, here's how to deploy to Digital Ocean (based on the instruct
 
    If you run into out-of-memory issues while building/deploying, try creating a swapfile (see <https://gist.github.com/henrik/26bb73091712aa42abf2#setup>).
 
-4. On your local machine, where this Git repository is located, define the remote repo to push and deploy to. Replace `server IP` and run the following command:
+4. On your local machine, where this Git repository is located, define the remote repo to push and deploy to. Replace `droplet IP` and run the following command:
 
    ```bash
-   git remote add dokku dokku@[server IP]:bulletin
+   git remote add dokku dokku@[droplet IP]:bulletin
    ```
 
 5. Deploy using:
