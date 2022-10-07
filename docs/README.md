@@ -73,7 +73,7 @@ As a quick example, here's how to deploy to Digital Ocean (based on the instruct
 5. Deploy using:
 
    ```
-   git push dokku master
+   git push dokku main:master
    ```
 
 Custom domains and SSL are also supported, but weren't covered in this example. You could also consider creating a new user and disabling root login for security, but again we didn't cover this.
