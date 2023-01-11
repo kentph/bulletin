@@ -34,7 +34,7 @@
     "feedparser-promised": "^2.0.1",
     "form-data": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.5",
+    "knex": "^2.4.0",
     "languagedetect": "^2.0.0",
     "moment": "^2.27.0",
     "newsapi": "^2.4.0",
